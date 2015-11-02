@@ -23,6 +23,13 @@ target_metadata = None
 # ... etc.
 
 
+def get_uri_from_flask_app():
+    from flaskapp import create_app
+    app = create_app()
+    url = app.config['SQLALCHEMY_DATABASE_URI']
+    return url
+
+
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
 
@@ -35,7 +42,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = get_uri_from_flask_app()  # config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url, target_metadata=target_metadata, literal_binds=True)
 
@@ -50,8 +57,10 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
+    config_dict = config.get_section(config.config_ini_section)
+    config_dict['sqlalchemy.url'] = get_uri_from_flask_app()
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section),
+        config_dict,
         prefix='sqlalchemy.',
         poolclass=pool.NullPool)
 

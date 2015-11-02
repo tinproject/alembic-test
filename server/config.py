@@ -6,6 +6,7 @@ class BaseConfig:
     TESTING = False
     SECRET_KEY = 'secret'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
 
 
 class Development(BaseConfig):
