@@ -135,4 +135,4 @@ pip-selfcheck.json
 
 venv
 
-./instance/app.db
+server/instance

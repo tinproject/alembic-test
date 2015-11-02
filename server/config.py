@@ -5,6 +5,7 @@ class BaseConfig:
     DEBUG = False
     TESTING = False
     SECRET_KEY = 'secret'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class Development(BaseConfig):
