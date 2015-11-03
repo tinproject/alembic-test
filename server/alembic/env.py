@@ -3,6 +3,10 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 
+# import flask configurations: app, db
+from flaskapp import create_app
+from flaskapp.models import db
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -15,7 +19,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+# target_metadata = None
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -23,11 +27,9 @@ target_metadata = None
 # ... etc.
 
 
-def get_uri_from_flask_app():
-    from flaskapp import create_app
-    app = create_app()
-    url = app.config['SQLALCHEMY_DATABASE_URI']
-    return url
+app = create_app()
+sqlalchemy_url = app.config['SQLALCHEMY_DATABASE_URI']
+target_metadata = db.metadata
 
 
 def run_migrations_offline():
@@ -42,7 +44,7 @@ def run_migrations_offline():
     script output.
 
     """
-    url = get_uri_from_flask_app()  # config.get_main_option("sqlalchemy.url")
+    url = sqlalchemy_url  # config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url, target_metadata=target_metadata, literal_binds=True)
 
@@ -58,7 +60,7 @@ def run_migrations_online():
 
     """
     config_dict = config.get_section(config.config_ini_section)
-    config_dict['sqlalchemy.url'] = get_uri_from_flask_app()
+    config_dict['sqlalchemy.url'] = sqlalchemy_url
     connectable = engine_from_config(
         config_dict,
         prefix='sqlalchemy.',
