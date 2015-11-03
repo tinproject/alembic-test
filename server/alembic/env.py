@@ -3,6 +3,10 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 
+# load app directory so packages can be imported
+import sys
+from os.path import abspath, dirname
+sys.path.insert(0, dirname(dirname(abspath(__file__))))
 # import flask configurations: app, db
 from flaskapp import create_app
 from flaskapp.models import db
