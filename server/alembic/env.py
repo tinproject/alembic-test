@@ -1,6 +1,6 @@
 from __future__ import with_statement
 from alembic import context
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import engine_from_config, pool, MetaData
 from logging.config import fileConfig
 
 # load app directory so packages can be imported
@@ -33,7 +33,10 @@ fileConfig(config.config_file_name)
 
 app = create_app()
 sqlalchemy_url = app.config['SQLALCHEMY_DATABASE_URI']
-target_metadata = db.metadata
+with app.app_context():
+    target_metadata = MetaData(db.get_tables_for_bind())
+
+print(target_metadata)
 
 
 def run_migrations_offline():
