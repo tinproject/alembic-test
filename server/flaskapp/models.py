@@ -21,6 +21,7 @@ class User(db.Model):
     full_name = db.Column(db.String(250), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     tel = db.Column(db.String(9), nullable=False)
+    name = db.Column(db.String(50), nullable=False)
 
     def __init__(self, full_name, email, tel):
         self.full_name = full_name
